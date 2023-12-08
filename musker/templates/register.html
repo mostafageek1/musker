@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="col-md-6 offset-md-3">
+    <!-- Registration heading -->
+    <h1>Register</h1>
+    <br>
+    <!-- Registration form -->
+    <form method="POST" action="">
+        {% csrf_token %}
+        <!-- Display form fields as paragraphs -->
+        {{ form.as_p }}
+        <br>
+        <!-- Submit button -->
+        <button type="submit" class="btn btn-secondary">
+            Register
+        </button>
+    </form>
+</div>
+{% endblock %}

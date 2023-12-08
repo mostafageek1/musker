@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container">
+    <!-- Search form -->
+    <h1>Search For Users!</h1>
+    <br>
+    <form method="POST">
+        {% csrf_token %}
+        <input type="input" class="form-control" placeholder="Search Users" name="user_search">
+        <br>
+        <button type="submit" class="btn btn-secondary">Search Users!</button>
+    </form>
+    <br>
+
+    <!-- Display search results -->
+    {% if user_search %}
+        <h3>You Searched For: {{ user_search }}</h3>
+        <br>
+    {% endif %}
+
+    {% if searched %}
+        {% for result in searched %}
+            <!-- User card -->
+            <div class="card md-3" style="max-width: 540px;">
+                <div class="row g-0">
+                    <!-- Profile image -->
+                    <div class="col-md-4">
+                        {% if result.profile.profile_image %}
+                            <img class="img-fluid rounded-start" src="{{ result.profile.profile_image.url }}" alt="Profile image">
+                        {% else %}
+                            <img class="img-fluid rounded-start" src="{% static 'images/default.jpeg' %}" alt="Profile image">
+                        {% endif %}
+                    </div>
+                    <!-- User details -->
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ result.profile.user.username }}</h5>
+                            <!-- User profile link -->
+                            <p class="card-text"><a href="{% url 'profile' result.profile.user.id %}">
+                                @{{ result.profile.user.username|lower }}
+                            </a> </p>
+                            <br>
+                            <!-- Last updated timestamp -->
+                            <p class="card-text"><small class="text-muted">Last updated: {{ result.profile.date_modified }}</small></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br>
+        {% endfor %}
+    {% else %}
+        <!-- No results message -->
+        {% if searched == None %}
+        {% else %}
+            <h4>Sorry, no user found!</h4>
+        {% endif %}
+    {% endif %}
+</div>
+{% endblock %}

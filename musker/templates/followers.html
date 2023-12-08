@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container">
+    <!-- Display the title with the username of the logged-in user and the word 'Followers' -->
+    <h1>{{ request.user.username }}'s Followers</h1>
+    <br>
+
+    {% if profiles %}
+        {% for profile in profiles.followed_by.all %}
+            <!-- Display each profile that follows the current user -->
+            <div class="card md-3" style="max-width: 540px;">
+                <div class="row g-0">
+                    <div class="col-md-4">
+                        <!-- Display the profile image of the follower -->
+                        {% if profile.profile_image %}
+                            <img class="img-fluid rounded-start" src="{{ profile.profile_image.url }}" alt="Profile image">
+                        {% else %}
+                            <img class="img-fluid rounded-start" src="{% static 'images/default.jpeg' %}" alt="Profile image">
+                        {% endif %}
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <!-- Display username as the card title -->
+                            <h5 class="card-title">{{ profile.user.username }}</h5>
+                            <!-- Provide a link to the profile page of the follower -->
+                            <p class="card-text"><a href="{% url 'profile' profile.user.id %}">
+                                @{{ profile.user.username|lower }}
+                            </a> </p>
+                            <br>
+                            <!-- Display the last updated timestamp of the profile -->
+                            <p class="card-text"><small class="text-muted">Last updated: {{ profile.date_modified }}</small></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br>
+        {% endfor %}
+    {% endif %}
+</div>
+{% endblock %}

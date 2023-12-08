@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container text-center">
+    <div class="row">
+        <!-- Meep display section -->
+        <div class="col-8">
+            <h1>Meeps!</h1>
+            <!-- Individual Meep entry -->
+            <div class="alert alert-dark" role="alert">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-1">
+                            <!-- Profile image of the Meep's user -->
+                            {% if meep.user.profile.profile_image %}
+                                <img class="rounded-circle" src="{{ meep.user.profile.profile_image.url }}" width="50" height="50">
+                            {% else %}
+                                <img class="rounded-circle" src="{% static 'images/default.jpeg' %}" width="50" height="50">
+                            {% endif %}
+                        </div>
+                        <div class="col-11">
+                            <!-- Meep content and details -->
+                            {{ meep.body }} <br><br>
+                            <small>
+                                <div class="text-muted">
+                                    {{ meep.created_at }} 
+                                    By @{{ meep.user.username }}
+                                    - {{ meep.number_of_likes }} Likes - 
+                                    <!-- Like button with heart icon -->
+                                    {% if user in meep.likes.all %}
+                                        <a href="{% url 'meep_like' meep.id %}">
+                                            <i class="fa-solid fa-heart" style="color: red;"></i>
+                                        </a>
+                                    {% else %}
+                                        <a href="{% url 'meep_like' meep.id %}">
+                                            <i class="fa fa-heart-o" style="color: red;"></i>
+                                        </a>
+                                    {% endif %}
+                                </div>
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Meep creation form section -->
+        <div class="col-4">
+            <br><br>
+            {% if form %}
+                <!-- Meep creation form -->
+                <form method="POST">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <!-- Submit button for creating a new Meep -->
+                    <button type="submit" class="btn btn-secondary">Meep!</button>
+                </form>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
